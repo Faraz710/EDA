@@ -1,0 +1,67 @@
+---
+title: "CSE3506 Lab3"
+author: "Faraz Suhail"
+date: "28/01/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Name: "Faraz Suhail"
+## Reg. No.: "19BCE1525"
+## Exercise 3: Regression and Forecasting on weather data
+
+```{r}
+library(forecast)
+library(tseries)
+library(dplyr)
+```
+
+```{r}
+weather <- read.csv('weatherHistory2016.csv')
+head(weather)
+```
+
+```{r}
+a=sample_n(weather,200)
+head(a)
+cor.test(a$Temperature..C.,a$Apparent.Temperature..C.)
+cor.test(a$Temperature..C.,a$Humidity)
+cor.test(a$Temperature..C.,a$Wind.Speed..km.h.)
+cor.test(a$Temperature..C.,a$Wind.Bearing..degrees.)
+cor.test(a$Temperature..C.,a$Pressure..millibars.)
+cor.test(a$Temperature..C.,a$Visibility..km.)
+cor.test(a$Temperature..C.,a$Loud.Cover)
+lmodel=lm(a$Temperature..C.~a$Apparent.Temperature..C.+a$Humidity+a$Visibility..km.)
+summary(lmodel)
+```
+
+
+```{r}
+weatherts<-ts(weather$Temperature..C.,start = as.Date("2016-10-01"),end = as.Date("2016-12-31"),frequency = 24)
+
+par(mar=c(2,2,2,2))
+plot(weatherts)
+```
+
+
+```{r}
+acf(weatherts)
+pacf(weatherts)
+adf.test(weatherts)
+```
+
+```{r}
+gmodel<-auto.arima(weatherts,ic="aic",trace=TRUE)
+```
+
+```{r}
+gforecast=forecast(gmodel, level = c(95),h=30)
+accuracy(gmodel)
+```
+
+```{r}
+plot(gforecast)
+```

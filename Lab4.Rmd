@@ -1,0 +1,35 @@
+---
+title: "CSE3506 Lab4"
+author: "Faraz Suhail"
+date: "04/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Name: "Faraz Suhail"
+## Reg. No.: "19BCE1525"
+## Exercise 4: Analysis of Variance (ANOVA)
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+data <- read.csv("color-anova-example.csv")
+head(data)
+```
+
+```{r}
+group_by(data,color) %>% summarise(count = n(),mean = mean(response, 
+na.rm = TRUE))
+ANOVA1 <- aov(response~color, data = data)
+summary(ANOVA1)
+```
+
+```{r}
+# Tukey HSD (Tukey Honest Significant Differences)
+TukeyHSD(ANOVA1)
+```

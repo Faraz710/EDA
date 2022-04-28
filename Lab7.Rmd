@@ -1,0 +1,81 @@
+---
+title: "CSE3506 Lab7"
+author: "Faraz Suhail"
+date: "25/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Name: "Faraz Suhail"
+## Reg. No.: "19BCE1525"
+## Exercise 7: Kmeans
+
+#### Iris
+```{r}
+library(factoextra)
+library(cluster)
+rm(list=ls())
+data1<-read.csv("iris.csv")
+head(data1)
+df<-scale(data1)
+fit<-kmeans(df,centers=2)
+fit$cluster
+fit$size
+fit$withinss
+fit$tot.withinss
+Kmax<-15
+wcss<-rep(NA,Kmax)
+nClust<- list()
+for(i in 1:Kmax){
+  fit<-kmeans(df,i)
+  wcss[i]<-fit$tot.withinss
+  nClust[[i]]<-fit$size
+}
+plot(1:Kmax,wcss,type="b",pch=19)
+fit<-kmeans(df,centers=3)
+fit$cluster
+fit$size
+fit$center
+fviz_nbclust(df, kmeans, method = "wss")
+fviz_cluster(fit, data1)
+fitm <- pam(df, 3, metric = "manhattan")
+fitm
+fitm$medoids
+fviz_cluster(fitm, data1)
+```
+
+#### USArrest
+```{r}
+rm(list=ls())
+data2<-read.csv("USArrests.csv")
+head(data2)
+data2<-data2[,-1]
+df1<-scale(data2)
+fit1<-kmeans(df1,centers=2)
+fit1$cluster
+fit1$size
+fit1$withinss
+fit1$tot.withinss
+Kmax1<-15
+wcss1<-rep(NA,Kmax1)
+nClust1<- list()
+for(i in 1:Kmax1){
+ fit1<-kmeans(df1,i)
+ wcss1[i]<-fit1$tot.withinss
+ nClust1[[i]]<-fit1$size
+}
+plot(1:Kmax1,wcss1,type="b",pch=19)
+fit1<-kmeans(df1,centers=3)
+fit1$cluster
+fit1$size
+fit1$center
+fviz_nbclust(df1, kmeans, method = "wss")
+fviz_cluster(fit1, data2)
+fitm1 <- pam(df1, 3, metric = "manhattan")
+fitm1
+fitm1$medoids
+fviz_cluster(fitm1, data2)
+```

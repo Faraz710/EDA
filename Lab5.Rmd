@@ -1,0 +1,56 @@
+---
+title: "CSE3506 Lab5"
+author: "Faraz Suhail"
+date: "11/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Name: "Faraz Suhail"
+## Reg. No.: "19BCE1525"
+## Exercise 5: Logistic Regression
+
+
+```{r}
+library(caTools)
+```
+
+```{r}
+df<-read.table("Social_Network_Ads.csv",header=TRUE,sep=",")
+head(df,3)
+```
+
+```{r}
+splitd<-sample.split(df,SplitRatio = 0.8)
+train=subset(df,splitd=="TRUE")
+test=subset(df,splitd=="FALSE")
+```
+
+```{r}
+df$Gender <- as.factor(df$Gender)
+df$Purchased <- as.factor(df$Purchased)
+mymodel <- glm(Purchased~Age+Gender+EstimatedSalary, data=df, family='binomial')
+summary(mymodel)
+```
+
+```{r}
+restrain<-predict(mymodel,train,type='response')
+plot(restrain)
+```
+
+```{r}
+restest<-predict(mymodel,test,type='response')
+plot(restest,col='red')
+par(new=TRUE)
+plot(test$Purchased)
+```
+
+```{r}
+cfmatrix<-table(Act=test$Purchased, pred=restest>0.5)
+cfmatrix
+Acc=(cfmatrix[[1,1]]+cfmatrix[[2,2]])/sum(cfmatrix)
+Acc
+```

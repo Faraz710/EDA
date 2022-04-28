@@ -1,0 +1,38 @@
+---
+title: "CSE3506 Lab9"
+author: "Faraz Suhail"
+date: "20/03/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Name: "Faraz Suhail"
+## Reg. No.: "19BCE1525"
+## Exercise 9: Gradient Descent 
+
+```{r}
+gd<-function(x,y,m,c,alpha,con_thr,iter){
+  iteration=0
+  lf<-0
+  while(iteration<iter){
+  y_pred<-m*x+c
+  lf_new<-0.5*sum(y_pred-y)^2
+ 
+  m<-m-alpha*sum((y_pred-y)*x)
+  c<-c-alpha*sum(y_pred-y)
+ 
+  lf<-lf_new
+  iteration=iteration+1
+ 
+  }
+  return (paste("Optimal intercept ",c ,"optimal slope ",m, "iterations:",iteration,"loss
+function",lf))
+}
+
+data<-mtcars
+plot(data$mpg,data$wt,col="red",pch=20)
+gd(data$wt,data$mpg,-0.2,32,0.003,0.0001,1000)
+```

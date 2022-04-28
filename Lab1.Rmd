@@ -1,0 +1,74 @@
+---
+title: "CSE3506 Lab1"
+author: "Faraz Suhail"
+date: "14/01/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Name: "Faraz Suhail"
+## Reg. No.: "19BCE1525"
+## Exercise 1: Regression 
+
+```{r}
+#load needed libraries
+library(dplyr)
+
+#load the data
+df <- read.csv("Lab1.csv")
+
+df = subset(df, select = -c(Gender,Index) )
+head(df)
+```
+
+```{r}
+plot(df, col='blue', main="Relationship between Height and Weight")
+```
+
+```{r}
+cor(df$Height, df$Weight)
+```
+
+### Inference: It is clear from the plot and the correlation that height and weight have a very weak relationship (low correlation)
+
+```{r}
+#Fit the model
+model = lm(Weight ~ Height, data = df)
+summary(model)
+```
+
+### Inferences:
+1. P value is 0.992 which is not significant as it should be less than 0.05 so model is rejected
+
+2. Multiple R-squared is  1.989e-07 which is very close to 0 so this implies no relation between variables
+
+3. R square has a negative value as the model selected does not follow the trend of the data, therefore leading to a worse fit than the horizontal line.
+
+```{r}
+mtcars = subset(mtcars, select = c(mpg,wt) )
+head(mtcars)
+```
+
+```{r}
+plot(mtcars, col='blue', main="Relationship between mpg and wt")
+```
+
+```{r}
+cor(mtcars$wt, mtcars$mpg)
+```
+
+### Inference: It is clear from the plot and the correlation that height and weight have a strong negative relationship (high correlation)
+
+```{r}
+#Fit the model
+model2 = lm(mpg ~ wt, data = mtcars)
+summary(model2)
+```
+
+### Inferences:
+1. P value is 1.294e-10 which is very significant as it is close to 0 so model is accepted
+
+2. Multiple R-squared is 0.7528 which is close to 1 so this implies strong relationship between variables

@@ -1,0 +1,28 @@
+---
+title: "CSE3506 Lab8"
+author: "Faraz Suhail"
+date: "25/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Name: "Faraz Suhail"
+## Reg. No.: "19BCE1525"
+## Exercise 8: Hierarchical Clustering
+
+#### Iris
+```{r}
+rm(list=ls())
+data<-read.csv("iris.csv",row.names = 1)
+head(data)
+df <- scale(data)
+head(df)
+ed <- dist(df,method="euclidean")
+herclust <- hclust(ed,method='complete')
+plot(herclust)
+cluster1 <- cutree(herclust,k=4)
+cluster1 <- rect.hclust(herclust,k=4)
+```

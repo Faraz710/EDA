@@ -1,0 +1,86 @@
+---
+title: "CSE3506 Lab2"
+author: "Faraz Suhail"
+date: "21/01/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Name: "Faraz Suhail"
+## Reg. No.: "19BCE1525"
+## Exercise 2: Time-series Forecasting
+
+```{r}
+library(forecast)
+library(tseries)
+```
+## Arima Model for Gold dataset
+```{r}
+gold<-read.csv("gold.csv")
+gold
+```
+
+```{r}
+gold_ts<-ts(gold$Price,start = min(gold$Month),end = max(gold$Month),frequency = 1)
+par(mar=c(2,2,2,2))
+plot(gold_ts)
+```
+
+There is upward trend. Time series with trends, or with seasonality, are not stationary
+
+```{r}
+acf(gold_ts)
+```
+
+The ACF declines gradually from
+1 to 0 over a prolonged period of time,
+then the series is not stationary
+
+```{r}
+pacf(gold_ts)
+adf.test(gold_ts)
+```
+
+p value high so bad model. 
+
+```{r}
+gmodel<-auto.arima(gold_ts,ic="aic",trace=TRUE)
+gold_forecast=forecast(gmodel,level = c(95),h=24)
+plot(gold_forecast)
+```
+
+```{r}
+accuracy(gmodel)
+```
+
+
+## Arima Model for GDP dataset
+```{r}
+gdp=read.csv("gdp.csv")
+gdp_ts<-ts(gdp$GDP_gr,start = min(gdp$Year),end = max(gdp$Year),frequency = 1)
+par(mar=c(2,2,2,2))
+plot(gdp_ts)
+```
+
+```{r}
+acf(gdp_ts)
+```
+
+The ACF falls immediately from 1 to 0,
+then equals about 0 thereafter, the series is
+stationary
+
+```{r}
+pacf(gdp_ts)
+adf.test(gdp_ts)
+gdp_model<-auto.arima(gdp_ts,ic="aic",trace=TRUE)
+gdp_forecast=forecast(gdp_model,level = c(95),h=30)
+plot(gdp_forecast)
+```
+
+```{r}
+accuracy(gdp_model)
+```
